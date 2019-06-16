@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Patatap Clone</title>
+    <link rel="stylesheet" type="text/css" href="assets/css/patatap_clone.css">
+    <script type="text/javascript" src="assets/js/lib/paper-full.js"></script>
+    <script type="text/javascript" src="assets/js/lib/howler.js"></script>
+    <script type="text/paperscript" canvas="canvas">
+        var howl = {
+            a: {
+                color: "purple",
+                sound: new Howl({
+                    src:['assets/sounds/bubbles.mp3']
+                })
+            },
+            s: {
+                color: "blue",
+                sound: new Howl({
+                    src:['assets/sounds/clay.mp3']
+                })
+            },
+            d: {
+                color: "red",
+                sound: new Howl({
+                    src:['assets/sounds/confetti.mp3']
+                })
+            },
+            f: {
+                color: "green",
+                sound: new Howl({
+                    src:['assets/sounds/glimmer.mp3']
+                })
+            }
+        }
+        var circles = [];
+
+        function onKeyDown(event) {
+            if(howl[event.key]) {
+                var maxPoint = new Point(view.size.width, view.size.height);
+                var randomPoint = Point.random();
+                var point = maxPoint * randomPoint;
+                var newCircle = new Path.Circle(point, 500);
+                newCircle.fillColor = howl[event.key].color;
+                circles.push(newCircle);
+                howl[event.key].sound.play();
+            }
+        }
+
+        function onFrame(event) {
+            for(var i = 0; i < circles.length; i++) {
+                circles[i].fillColor.hue += 1;
+                circles[i].scale(.9);
+                if(circles[i].area < 1) {
+                    circles[i].remove();
+                    circles.splice(i,1);
+                    //console.log(circles);
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+    <canvas id="canvas" resize></canvas>
+</body>
+
+</html>
